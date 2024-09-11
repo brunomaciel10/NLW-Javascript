@@ -1,5 +1,27 @@
 // usando o INQUIRER => é um módulo node.js para PROMPTS interativos
-const {select} = require("@inquirer/prompts");
+const { select, input } = require("@inquirer/prompts");
+
+// modelo de meta
+let meta = {
+    value: "Tomar 3L de água por dia.",
+    checked: false
+};
+
+// lista de metas
+let metas = [meta];
+
+// cadastrar nova meta
+const cadastrarMeta = async () => {
+    const meta = await input({message: "Digite sua meta:"});
+
+    // verifica se o usuário digitou algo
+    if(meta.length == 0) {
+        console.log("A meta não pode ser vazia.");
+        return;
+    }
+
+    metas.push({ value: meta, checked: false });
+}
 
 const start = async () => {
     while(true) {
@@ -26,7 +48,8 @@ const start = async () => {
         // irá executar uma ação de acordo com a opção escolhida
         switch(opcao) {
             case "cadastrar":
-                console.log("vamos cadastrar");
+                await cadastrarMeta();
+                console.log(metas);
             break;
             case "listar":
                 console.log("vamos listar")
