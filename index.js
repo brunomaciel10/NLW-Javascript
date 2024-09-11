@@ -1,4 +1,4 @@
-function start() {
-    console.log("Começou");
-};
+const start = () => {
+    
+};  
 start();
