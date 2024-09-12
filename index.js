@@ -217,7 +217,7 @@ const start = async () => {
                 await deletarMetas();
             break;
             case "sair":
-                console.log("Até a próxima!");
+                console.log("Até a próxima! :)");
                 return
         };
     };
