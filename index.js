@@ -1,6 +1,8 @@
 // usando o INQUIRER => é um módulo node.js para PROMPTS interativos
 const { select, input, checkbox } = require("@inquirer/prompts");
 
+let mensagem = "Bem-vindo(a) ao App de metas!"; // mensagem padrão
+
 // modelo de meta
 let meta = {
     value: "Tomar 3L de água por dia.",
@@ -16,11 +18,13 @@ const cadastrarMeta = async () => {
 
     // verifica se o usuário digitou algo
     if(meta.length == 0) {
-        console.log("A meta não pode ser vazia.");
+        mensagem = "A meta não pode ser vazia.";
         return;
     }
 
     metas.push({ value: meta, checked: false });
+
+    mensagem = "Meta cadastrada com sucesso!";
 };
 
 // listar todas as metas
@@ -37,7 +41,7 @@ const listarMetas = async () => {
     });
 
     if(respostas.length == 0) {
-        console.log("Nenhuma meta selecionada.")
+        mensagem = "Nenhuma meta selecionada.";
         return;
     };
 
@@ -50,7 +54,7 @@ const listarMetas = async () => {
         meta.checked = true;
     });
 
-    console.log("Meta(s) concluída(s).")
+    mensagem = "Meta(s) concluída(s).";
 };
 
 // metas realizadas
@@ -60,7 +64,7 @@ const metasRealizadas = async () => {
     });
 
     if(realizadas.length == 0) {
-        console.log("Não existem metas realizadas. :(");
+        mensagem = "Não existem metas realizadas. :(";
         return
     };
 
@@ -77,7 +81,7 @@ const metasAbertas = async () => {
     });
 
     if(abertas.length == 0) {
-        console.log("Não existem metas abertas. :)");
+        mensagem = "Não existem metas abertas. :)";
         return
     };
 
@@ -100,7 +104,7 @@ const deletarMetas = async () => {
     });
 
     if(itensADeletar.length == 0) {
-        console.log("Não há itens para deletar.")
+        mensagem = "Não há itens para deletar.";
     };
 
     // deleta a meta selecionada
@@ -110,12 +114,24 @@ const deletarMetas = async () => {
         });
     });
 
-    console.log("Meta(s) deletada(s) com sucesso.")
+    mensagem = "Meta(s) deletada(s) com sucesso.";
+};
+
+// sistema de mensagens
+const mostrarMensagem = () => {
+    console.clear(); // limpa o console
+
+    if(mensagem != 0) {
+        console.log(mensagem);
+        console.log("");
+        mensagem = "";
+    };
 };
 
 // inicia a aplicação
 const start = async () => {
     while(true) {
+        mostrarMensagem();
 
         // define as opções que irão aparecer nos prompts 
         const opcao = await select({
@@ -142,7 +158,7 @@ const start = async () => {
                     value: "deletar"
                 },
                 {
-                    name: "Sair",
+                    name: "Encerrar App",
                     value: "sair"
                 }
             ]
