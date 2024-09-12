@@ -28,7 +28,7 @@ const listarMetas = async () => {
     const respostas = await checkbox({
         message: "Use as setas para alternar entre as metas, o espaço para marcar/desmarcar e o Enter para finalizar esta etapa.",
         choices: [...metas],
-        instructions: false
+        instructions: false // retira as instruções de uso do checkbox
     });
 
     // marca todas as metas existentes como FALSE
@@ -61,11 +61,11 @@ const metasRealizadas = async () => {
 
     if(realizadas.length == 0) {
         console.log("Não existem metas realizadas. :(");
-        return;
+        return
     };
 
     await select({
-        message: "Metas Realizadas",
+        message: `Metas realizadas (${realizadas.length})`,
         choices: [...realizadas]
     });
 };
@@ -73,20 +73,47 @@ const metasRealizadas = async () => {
 // metas abertas
 const metasAbertas = async () => {
     const abertas = metas.filter((meta) => {
-        return meta.checked != true;
+        return !meta.checked;
     });
 
     if(abertas.length == 0) {
         console.log("Não existem metas abertas. :)");
-        return;
+        return
     };
 
     await select({
-        message: "Metas Abertas",
-        choises: [...abertas]
+        message: `Metas abertas (${abertas.length})`,
+        choices: [...abertas]
     });
-}
+};
 
+// deletar metas
+const deletarMetas = async () => {
+    const metasDesmarcadas = metas.map((meta) => {
+        return {value: meta.value, checked: false};
+    });
+
+    const itensADeletar = await checkbox({
+        message: "Selecione uma meta para deletar.",
+        choices: [...metasDesmarcadas],
+        instructions: false
+    });
+
+    if(itensADeletar.length == 0) {
+        console.log("Não há itens para deletar.")
+    };
+
+    // deleta a meta selecionada
+    itensADeletar.forEach((item) => {
+        metas = metas.filter((meta) => {
+            return meta.value != item;
+        });
+    });
+
+    console.log("Meta(s) deletada(s) com sucesso.")
+};
+
+// inicia a aplicação
 const start = async () => {
     while(true) {
 
@@ -111,6 +138,10 @@ const start = async () => {
                     value: "abertas"
                 },
                 {
+                    name: "Deletar metas",
+                    value: "deletar"
+                },
+                {
                     name: "Sair",
                     value: "sair"
                 }
@@ -130,6 +161,9 @@ const start = async () => {
             break;
             case "abertas":
                 await metasAbertas();
+            break;
+            case "deletar":
+                await deletarMetas();
             break;
             case "sair":
                 console.log("Até a próxima!");
