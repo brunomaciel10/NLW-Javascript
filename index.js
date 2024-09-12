@@ -1,16 +1,27 @@
 // usando o INQUIRER => é um módulo node.js para PROMPTS interativos
 const { select, input, checkbox } = require("@inquirer/prompts");
 
-let mensagem = "Bem-vindo(a) ao App de metas!"; // mensagem padrão
+// módulo node.js para salvar dados
+const fs = require("fs").promises;
 
-// modelo de meta
-let meta = {
-    value: "Tomar 3L de água por dia.",
-    checked: false
-};
+let mensagem = "Bem-vindo(a) ao App de metas!"; // mensagem inicial
 
 // lista de metas
-let metas = [meta];
+let metas
+
+// carregar/salvar as metas
+const carregarMetas = async () => {
+    try {
+        const dados = await fs.readFile("metas.json", "utf-8"); // serve para o programa ler o arquivo das metas
+        metas = JSON.parse(dados);
+    }
+    catch(erro) {
+        metas = [];
+    }
+};
+const salvarMetas = async () => {
+    await fs.writeFile("metas.json", JSON.stringify(metas, null, 2));
+}
 
 // cadastrar nova meta
 const cadastrarMeta = async () => {
@@ -130,8 +141,11 @@ const mostrarMensagem = () => {
 
 // inicia a aplicação
 const start = async () => {
+    await carregarMetas();
+
     while(true) {
         mostrarMensagem();
+        await salvarMetas();
 
         // define as opções que irão aparecer nos prompts 
         const opcao = await select({
