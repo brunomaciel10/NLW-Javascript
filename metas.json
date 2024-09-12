@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "value": "Caminhar 30min por dia.",
+    "checked": true
+  },
+  {
+    "value": "Tomar 3L de água por dia.",
+    "checked": false
+  }
+]
